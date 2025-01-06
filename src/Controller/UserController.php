@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class UserController extends AbstractController
 {
-    #[Route('/user', name: 'app_user', methods: ['GET'])]
+    #[Route('/users', name: 'users_list', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): JsonResponse
     {
         $repository = $entityManager->getRepository(User::class);
@@ -24,10 +24,28 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/user', name: 'create_user', methods: ['POST'])]
+    #[Route('/users/{user}', name: 'users_single', methods: ['GET'])]
+    public function single(EntityManagerInterface $entityManager, int $user): JsonResponse
+    {
+        $repository = $entityManager->getRepository(User::class);
+
+        $user = $repository->find($user);
+
+        if(!$user) throw $this->createNotFoundException();
+
+        return $this->json([
+            'data' => $user
+        ]);
+    }
+
+    #[Route('/users', name: 'users_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        $data = $request->request->all();
+        if($request->headers->get('Content-Type') == 'application/json'){
+            $data = $request->toArray();
+        } else {
+            $data = $request->request->all();
+        }
 
         $user = new User();
         $user->setName($data['name']);
@@ -41,7 +59,55 @@ class UserController extends AbstractController
         $entityManager->flush();
 
         return $this->json([
-            'message' => 'usuario criado com o id '.$user->getId()
+            'message' => 'usuario criado com o id '.$user->getId(),
         ], 201);
+    }
+
+    #[Route('/users/{user}', name: 'users_update', methods: ['PUT'])]
+    public function update(Request $request, EntityManagerInterface $entityManager, int $user): JsonResponse
+    {
+        $repository = $entityManager->getRepository(User::class);
+
+        $user = $repository->find($user);
+
+        if(!$user) throw $this->createNotFoundException();
+
+        if($request->headers->get('Content-Type') == 'application/json'){
+            $data = $request->toArray();
+        } else {
+            $data = $request->request->all();
+        }
+
+        $user->setName($data['name']);
+        $user->setEmail($data['email']);
+        $user->setPassword($data['password']);
+        $user->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('America/Sao_Paulo')));
+
+        $entityManager->persist($user);
+
+        $entityManager->flush();
+
+
+        return $this->json([
+            'data' => $user
+        ]);
+    }
+
+    #[Route('/users/{user}', name: 'users_delete', methods: ['DELETE'])]
+    public function delete(EntityManagerInterface $entityManager, int $user): JsonResponse
+    {
+        $repository = $entityManager->getRepository(User::class);
+
+        $user = $repository->find($user);
+
+        if(!$user) throw $this->createNotFoundException();
+
+        $entityManager->remove($user);
+
+        $entityManager->flush();
+
+        return $this->json([
+            'message' => 'usuario '.$user->getName().' deletado com sucesso'
+        ]);
     }
 }
