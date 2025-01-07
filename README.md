@@ -41,9 +41,15 @@ GET ``` 127.0.0.1:8000/api/users ```
 GET ``` 127.0.0.1:8000/api/users/{userID} ``` 
 
 #### Criação
+
+```parâmetros: "name", "email", "password"```
+
 POST ``` 127.0.0.1:8000/api/users ```
 
 #### Atualização
+
+```parâmetros: "name", "email", "password"```
+
 PUT ``` 127.0.0.1:8000/api/users/{userID} ```
 
 #### Remoção
