@@ -38,13 +38,13 @@ symfony server:start -d
 GET ``` 127.0.0.1:8000/api/users ``` 
 
 #### Busca específica
-GET ``` 127.0.0.1:8000/api/users/{user} ``` 
+GET ``` 127.0.0.1:8000/api/users/{userID} ``` 
 
 #### Criação
 POST ``` 127.0.0.1:8000/api/users ```
 
 #### Atualização
-PUT ``` 127.0.0.1:8000/api/users/{user} ```
+PUT ``` 127.0.0.1:8000/api/users/{userID} ```
 
 #### Remoção
-DELETE ``` 127.0.0.1:8000/api/users/{user} ```
+DELETE ``` 127.0.0.1:8000/api/users/{userID} ```
