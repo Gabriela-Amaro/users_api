@@ -31,3 +31,20 @@
   ```bash
   symfony server:start -d
   ```
+
+## Endpoints
+
+#### Busca todos 
+GET ``` 127.0.0.1:8000/api/users ``` 
+
+#### Busca específica
+GET ``` 127.0.0.1:8000/api/users/{user} ``` 
+
+#### Criação
+POST ``` 127.0.0.1:8000/api/users ```
+
+#### Atualização
+PUT ``` 127.0.0.1:8000/api/users/{user} ```
+
+#### Remoção
+DELETE ``` 127.0.0.1:8000/api/users/{user} ```
